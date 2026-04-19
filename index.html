@@ -1,991 +1,729 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mikey | Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=outfit@300,400,500,700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/typed.js@2.0.16/typed.umd.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { 
-                        sans: ['Outfit', 'sans-serif'], 
-                        display: ['Clash Display', 'sans-serif'] 
-                    },
-                    colors: { 
-                        void: '#050505', 
-                        neon: '#a855f7',
-                        primary: '#a855f7',
-                        secondary: '#3b82f6',
-                        accent: '#ec4899',
-                        success: '#22c55e'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body { 
-            background-color: #050505; 
-            color: #fff; 
-            overflow-x: hidden; 
-            font-family: 'Outfit', sans-serif;
-        }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Clash Display', sans-serif; }
-        
-        /* Minecraft Canvas Background */
-        #minecraft-bg {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            background: #050505;
-        }
-        
-        /* Glassmorphism */
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-        }
-        .glass:hover { 
-            background: rgba(255, 255, 255, 0.08); 
-            border-color: rgba(168, 85, 247, 0.3); 
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15);
-        }
-        
-        /* Neon Effects */
-        .neon-text { text-shadow: 0 0 40px rgba(168, 85, 247, 0.6); }
-        .neon-glow { box-shadow: 0 0 30px rgba(168, 85, 247, 0.4); }
-        
-        /* Gradient Text */
-        .gradient-text {
-            background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #3b82f6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        /* Scroll Progress Bar */
-        #scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 4px;
-            width: 100%;
-            background: linear-gradient(90deg, #a855f7, #ec4899, #3b82f6);
-            z-index: 1000;
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 0.1s linear;
-        }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a855f7; }
-        
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
-        @keyframes floatReverse {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(10px) rotate(-5deg); }
-        }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.6); }
-        }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.4; transform: scale(1) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
-        }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-        }
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor; }
-            50% { opacity: 0.6; box-shadow: 0 0 16px currentColor; }
-        }
-        
-        .float { animation: float 4s ease-in-out infinite; }
-        .float-reverse { animation: floatReverse 3.5s ease-in-out infinite; }
-        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-        .sparkle { animation: sparkle 3s ease-in-out infinite; }
-        .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
-        
-        /* Skill Bar Animation - FIXED WITH VISIBLE COLORS */
-        .skill-bar-fill {
-            position: relative;
-            overflow: hidden;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100%;
-            border-radius: 9999px;
-        }
-        .skill-bar-fill::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite 1s;
-        }
-        
-        /* Buttons */
-        .btn-primary {
-            display: inline-block;
-            padding: 12px 32px;
-            background: #a855f7;
-            color: white;
-            font-weight: 700;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .btn-primary:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.5);
-            background: rgba(168, 85, 247, 0.9);
-        }
-        
-        .btn-outline {
-            display: inline-block;
-            padding: 12px 32px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: transparent;
-            color: white;
-            font-weight: 700;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .btn-outline:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(168, 85, 247, 0.5);
-            transform: translateY(-4px);
-        }
-        
-        /* Service Card Icons */
-        .card-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .glass:hover .card-icon { 
-            transform: scale(1.1); 
-        }
-        
-        /* Gradient Orbs */
-        .gradient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(100px);
-            pointer-events: none;
-        }
-        
-        /* Minecraft floating blocks */
-        .mc-block {
-            position: absolute;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-        
-        /* Nav active state */
-        .nav-link {
-            position: relative;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #a855f7;
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
-        }
-        .nav-link:hover,
-        .nav-link.active {
-            color: #fff;
-        }
-        
-        /* Section title */
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            text-align: center;
-        }
-        @media (min-width: 768px) {
-            .section-title {
-                font-size: 2.25rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mikey — Developer & System Architect</title>
+  <meta name="description" content="Building optimized, secure & scalable systems." />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#0c0b13;--bg-card:rgba(18,17,28,0.5);--fg:#f2f2f2;--muted:#6b6b80;
+      --primary:#a855f7;--primary-glow:rgba(168,85,247,0.3);
+      --accent:#22d3ee;--accent-glow:rgba(34,211,238,0.2);
+      --border:rgba(255,255,255,0.06);--radius:12px;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif}
+    .text-gradient{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .glass{background:var(--bg-card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border)}
+
+    /* SNOW CANVAS */
+    #snow-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none}
+
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;width:100%;z-index:100;padding:24px 0;transition:all .4s}
+    .navbar.scrolled{background:rgba(12,11,19,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:12px 0}
+    .navbar-inner{max-width:1152px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;cursor:pointer;border:none;background:none}
+    .nav-links{display:flex;align-items:center;gap:32px}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.875rem;transition:color .3s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:2px;background:var(--primary);transform:scaleX(0);transform-origin:right;transition:transform .3s}
+    .nav-links a:hover{color:var(--fg)}
+    .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+    .nav-discord{padding:8px 20px;border-radius:50px;background:rgba(168,85,247,.15);color:var(--primary)!important;border:1px solid rgba(168,85,247,.25);font-weight:500;transition:all .3s!important}
+    .nav-discord:hover{background:rgba(168,85,247,.25)!important;transform:scale(1.05)}
+    .nav-discord::after{display:none!important}
+    .hamburger{display:none;background:none;border:none;color:var(--fg);cursor:pointer}
+    .mobile-menu{display:none;flex-direction:column;gap:8px;margin:8px 16px 0;padding:16px;border-radius:12px}
+    .mobile-menu a{color:var(--muted);text-decoration:none;padding:8px 0;font-size:.875rem}
+    @media(max-width:768px){.nav-links{display:none}.hamburger{display:block}.mobile-menu.open{display:flex}}
+
+    /* HERO */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;z-index:2}
+    .hero-orb1{position:absolute;top:20%;left:20%;width:400px;height:400px;background:rgba(168,85,247,.18);border-radius:50%;filter:blur(120px);animation:pulseGlow 4s ease-in-out infinite,orbFloat 8s ease-in-out infinite}
+    .hero-orb2{position:absolute;bottom:20%;right:20%;width:300px;height:300px;background:var(--accent-glow);border-radius:50%;filter:blur(100px);animation:pulseGlow 4s ease-in-out infinite 2s,orbFloat 10s ease-in-out infinite reverse}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px}
+    .hero-content{position:relative;z-index:10;text-align:center;padding:0 24px;max-width:800px}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:50px;font-size:.75rem;color:var(--muted);margin-bottom:32px;animation:fadeUp .8s ease-out both}
+    .hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+    .hero h1{font-size:clamp(3.5rem,10vw,8rem);font-weight:700;letter-spacing:-2px;margin-bottom:24px;animation:heroReveal 1s ease-out .2s both}
+    .hero p{font-size:1.125rem;color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.7;animation:fadeUp .8s ease-out .4s both}
+    .hero p span{color:var(--fg);font-weight:500}
+    .hero-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;animation:fadeUp .8s ease-out .6s both}
+    .btn-primary{padding:14px 32px;border-radius:50px;border:none;background:var(--primary);color:#fff;font-weight:500;font-size:.875rem;cursor:pointer;text-decoration:none;transition:all .3s;font-family:'Inter',sans-serif;position:relative;overflow:hidden}
+    .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(45deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-100%);transition:transform .5s}
+    .btn-primary:hover::before{transform:translateX(100%)}
+    .btn-primary:hover{box-shadow:0 0 40px var(--primary-glow),0 0 80px rgba(168,85,247,.15);transform:scale(1.05)}
+    .btn-secondary{padding:14px 32px;border-radius:50px;color:var(--fg);font-weight:500;font-size:.875rem;cursor:pointer;text-decoration:none;transition:all .3s;font-family:'Inter',sans-serif}
+    .btn-secondary:hover{border-color:rgba(168,85,247,.4);transform:scale(1.05)}
+    .hero-stats{display:flex;justify-content:center;gap:48px;margin-top:80px;animation:fadeUp .8s ease-out .8s both}
+    .hero-stats .stat-num{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700}
+    .hero-stats .stat-label{font-size:.75rem;color:var(--muted);margin-top:4px}
+    .scroll-indicator{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);animation:bounce 2s infinite}
+    .scroll-indicator span{font-size:.7rem;letter-spacing:3px;text-transform:uppercase}
+
+    /* SECTION COMMON */
+    .section{padding:128px 24px;position:relative;z-index:2}
+    .section-inner{max-width:1152px;margin:0 auto}
+    .section-header{text-align:center;margin-bottom:64px}
+    .section-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.3em;color:var(--primary);font-weight:500}
+    .section-title{font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;margin-top:12px}
+
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+    .about-visual{position:relative}
+    .about-visual-inner{aspect-ratio:1;border-radius:16px;padding:4px}
+    .about-visual-bg{width:100%;height:100%;border-radius:12px;background:linear-gradient(135deg,rgba(168,85,247,.15),var(--bg-card),rgba(34,211,238,.08));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .about-visual-bg span{font-family:'Space Grotesk',sans-serif;font-size:8rem;font-weight:700;opacity:.2}
+    .about-visual-bg .orbit{position:absolute;width:100%;height:100%;animation:spin 20s linear infinite}
+    .about-visual-bg .orbit-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--primary);box-shadow:0 0 15px var(--primary-glow)}
+    .about-visual-bg .orbit:nth-child(2){animation-duration:15s;animation-direction:reverse}
+    .about-visual-bg .orbit:nth-child(2) .orbit-dot{background:var(--accent);box-shadow:0 0 15px var(--accent-glow)}
+    .about-text h2{font-size:2rem;margin:12px 0 24px}
+    .about-text p{color:var(--muted);font-size:.875rem;line-height:1.8;margin-bottom:16px}
+    @media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:32px}}
+
+    /* SKILLS */
+    .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+    .skills-col h3{font-size:.8rem;font-weight:500;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px}
+    .skill-item{margin-bottom:20px}
+    .skill-info{display:flex;justify-content:space-between;font-size:.875rem;margin-bottom:8px}
+    .skill-info span:first-child{color:var(--muted)}
+    .skill-info span:last-child{color:var(--primary);font-weight:500}
+    .skill-bar{height:6px;border-radius:50px;background:rgba(255,255,255,.05);overflow:hidden}
+    .skill-bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--primary),var(--accent));width:0;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);position:relative}
+    .skill-bar-fill::after{content:'';position:absolute;right:0;top:-2px;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow);opacity:0;transition:opacity .3s .8s}
+    .skill-bar-fill.animated::after{opacity:1}
+    .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .tech-item{padding:16px;border-radius:12px;display:flex;align-items:center;gap:12px;transition:all .3s;cursor:default}
+    .tech-item:hover{border-color:rgba(168,85,247,.25);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+    .tech-item .icon{font-size:1.5rem;transition:transform .3s}
+    .tech-item:hover .icon{transform:scale(1.15) rotate(10deg)}
+    .tech-item .name{font-size:.875rem;color:var(--muted);transition:color .3s}
+    .tech-item:hover .name{color:var(--fg)}
+    @media(max-width:768px){.skills-grid{grid-template-columns:1fr;gap:40px}}
+
+    /* SERVICES - 3D SCENE */
+    .services-section{position:relative}
+    .services-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:384px;height:384px;background:rgba(168,85,247,.08);border-radius:50%;filter:blur(150px)}
+    .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;position:relative}
+    .service-card{padding:32px;border-radius:16px;transition:all .5s;cursor:default;position:relative;overflow:hidden}
+    .service-card:hover{border-color:rgba(168,85,247,.25);transform:translateY(-8px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .service-card h3{font-size:1.125rem;font-weight:600;margin-bottom:12px;position:relative;z-index:2}
+    .service-card p{font-size:.875rem;color:var(--muted);line-height:1.7;position:relative;z-index:2}
+
+    /* 3D Scene Container */
+    .scene-3d{width:100%;height:180px;perspective:600px;margin-bottom:20px;position:relative;display:flex;align-items:center;justify-content:center}
+    .scene-3d-inner{transform-style:preserve-3d;animation:sceneRotate 12s ease-in-out infinite;position:relative}
+
+    /* Minecraft blocks */
+    .mc-block{width:50px;height:50px;position:relative;transform-style:preserve-3d;display:inline-block}
+    .mc-face{position:absolute;width:50px;height:50px;border:1px solid rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:bold}
+    .mc-front{transform:translateZ(25px)}
+    .mc-back{transform:rotateY(180deg) translateZ(25px)}
+    .mc-left{transform:rotateY(-90deg) translateZ(25px)}
+    .mc-right{transform:rotateY(90deg) translateZ(25px)}
+    .mc-top{transform:rotateX(90deg) translateZ(25px)}
+    .mc-bottom{transform:rotateX(-90deg) translateZ(25px)}
+
+    .dirt .mc-face{background:#8B6914}
+    .dirt .mc-top{background:#4a7c2f}
+    .grass .mc-face{background:#4a7c2f}
+    .stone .mc-face{background:#7a7a7a}
+    .creeper .mc-face{background:#3daa3d}
+    .creeper .mc-front{background:#3daa3d;color:#000;font-size:2rem}
+    .tnt .mc-face{background:#cc2222}
+    .tnt .mc-front{color:#fff;font-size:.6rem;font-weight:700}
+
+    .mc-scene{display:flex;gap:8px;align-items:flex-end;transform-style:preserve-3d}
+    .mc-creeper{position:relative;transform-style:preserve-3d}
+    .mc-creeper-head{width:40px;height:40px;transform-style:preserve-3d;position:relative}
+    .mc-creeper-head .mc-face{width:40px;height:40px;background:#3daa3d}
+    .mc-creeper-head .mc-front{transform:translateZ(20px);display:flex;align-items:center;justify-content:center}
+    .mc-creeper-head .mc-back{transform:rotateY(180deg) translateZ(20px)}
+    .mc-creeper-head .mc-left{transform:rotateY(-90deg) translateZ(20px)}
+    .mc-creeper-head .mc-right{transform:rotateY(90deg) translateZ(20px)}
+    .mc-creeper-head .mc-top{transform:rotateX(90deg) translateZ(20px)}
+    .mc-creeper-head .mc-bottom{transform:rotateX(-90deg) translateZ(20px)}
+    .mc-creeper-body{width:30px;height:50px;transform-style:preserve-3d;position:relative;margin:0 auto}
+    .mc-creeper-body div{position:absolute;background:#3daa3d;border:1px solid rgba(0,0,0,.3)}
+
+    /* Linux terminal */
+    .terminal{width:100%;max-width:280px;background:#0d1117;border-radius:8px;overflow:hidden;font-family:'Courier New',monospace;font-size:.7rem;border:1px solid rgba(255,255,255,.1);transform:rotateX(5deg) rotateY(-5deg);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .terminal-bar{background:#161b22;padding:6px 10px;display:flex;gap:5px;align-items:center}
+    .terminal-dot{width:8px;height:8px;border-radius:50%}
+    .terminal-body{padding:10px;line-height:1.6;min-height:120px}
+    .terminal-body .prompt{color:#58a6ff}
+    .terminal-body .cmd{color:#c9d1d9}
+    .terminal-body .output{color:#7ee787}
+    .terminal-body .error{color:#f85149}
+    .typing-cursor{display:inline-block;width:6px;height:12px;background:#58a6ff;animation:blink 1s step-end infinite;vertical-align:middle}
+
+    /* Discord scene */
+    .discord-scene{width:100%;max-width:280px;background:#2b2d31;border-radius:10px;overflow:hidden;font-size:.75rem;border:1px solid rgba(255,255,255,.08);transform:rotateX(5deg) rotateY(5deg);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .discord-sidebar{background:#1e1f22;padding:8px;display:flex;flex-direction:column;gap:4px;float:left;width:70px;min-height:140px}
+    .discord-channel{color:#949ba4;padding:3px 6px;border-radius:4px;font-size:.65rem;white-space:nowrap;overflow:hidden}
+    .discord-channel.active{background:#404249;color:#fff}
+    .discord-chat{padding:8px;margin-left:70px;min-height:140px}
+    .discord-msg{display:flex;gap:6px;margin-bottom:6px;align-items:flex-start}
+    .discord-avatar{width:22px;height:22px;border-radius:50%;flex-shrink:0}
+    .discord-msg-content{font-size:.65rem}
+    .discord-msg-name{font-weight:600;margin-bottom:1px}
+    .discord-msg-text{color:#b5bac1}
+
+    /* Web dev scene */
+    .web-scene{width:100%;max-width:280px;transform-style:preserve-3d;position:relative}
+    .code-window{background:#1e1e2e;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08);font-family:'Courier New',monospace;font-size:.65rem;transform:rotateX(5deg) rotateY(-3deg);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+    .code-bar{background:#181825;padding:6px 10px;display:flex;gap:5px;align-items:center}
+    .code-tab{background:#1e1e2e;color:#cdd6f4;padding:3px 10px;border-radius:4px 4px 0 0;font-size:.6rem}
+    .code-body{padding:10px;line-height:1.8;color:#cdd6f4}
+    .code-body .tag{color:#89b4fa}
+    .code-body .attr{color:#a6e3a1}
+    .code-body .str{color:#f9e2af}
+    .code-body .comment{color:#6c7086;font-style:italic}
+
+    @media(max-width:768px){.services-grid{grid-template-columns:1fr}}
+
+    /* EXPERIENCE */
+    .exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:80px}
+    .exp-card{padding:32px;border-radius:16px;transition:all .4s}
+    .exp-card:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(0,0,0,.3)}
+    .exp-header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+    .exp-header .icon{font-size:1.75rem}
+    .exp-header h3{font-size:1.125rem;font-weight:600}
+    .exp-list{list-style:none}
+    .exp-list li{display:flex;align-items:flex-start;gap:12px;font-size:.875rem;color:var(--muted);margin-bottom:12px;transition:all .3s}
+    .exp-list li:hover{color:var(--fg);transform:translateX(4px)}
+    .exp-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--primary);margin-top:7px;flex-shrink:0;transition:all .3s}
+    .exp-list li:hover::before{box-shadow:0 0 10px var(--primary-glow);transform:scale(1.5)}
+    .roadmap{max-width:720px;margin:0 auto;padding:40px;border-radius:16px;text-align:center;position:relative;overflow:hidden}
+    .roadmap-glow{position:absolute;top:0;right:0;width:192px;height:192px;background:var(--accent-glow);border-radius:50%;filter:blur(80px)}
+    .roadmap h3{font-size:1.5rem;font-weight:700;margin:12px 0 16px}
+    .roadmap p{font-size:.875rem;color:var(--muted);line-height:1.7;margin-bottom:24px}
+    .roadmap-badge{display:inline-flex;align-items:center;gap:12px;padding:10px 20px;border-radius:50px;background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.15);color:var(--accent);font-size:.875rem}
+    .roadmap-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+    @media(max-width:768px){.exp-grid{grid-template-columns:1fr}}
+
+    /* CONTACT */
+    .contact{text-align:center;position:relative;z-index:2}
+    .contact-glow{position:absolute;bottom:0;left:33%;width:320px;height:320px;background:rgba(168,85,247,.08);border-radius:50%;filter:blur(120px)}
+    .contact-inner{max-width:640px;margin:0 auto;position:relative}
+    .contact h2{font-size:clamp(1.75rem,5vw,3rem);margin:12px 0 24px}
+    .contact p{color:var(--muted);margin-bottom:40px}
+    .contact-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+    .contact-email{color:var(--muted);font-size:.875rem;margin-top:32px}
+
+    /* FOOTER */
+    .footer{border-top:1px solid var(--border);padding:32px 24px;position:relative;z-index:2}
+    .footer-inner{max-width:1152px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+    .footer-inner span{font-size:.875rem;color:var(--muted)}
+    .footer-logo{font-family:'Space Grotesk',sans-serif;font-size:1.125rem;font-weight:700}
+    @media(max-width:640px){.footer-inner{flex-direction:column;gap:12px}.hero-stats{gap:24px}.hero-stats .stat-num{font-size:1.5rem}}
+
+    /* SNOW PILE */
+    #snow-pile{position:fixed;bottom:0;left:0;width:100%;z-index:3;pointer-events:none}
+
+    /* ANIMATIONS */
+    @keyframes pulseGlow{0%,100%{opacity:.4}50%{opacity:1}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-8px)}}
+    @keyframes orbFloat{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}
+    @keyframes heroReveal{0%{opacity:0;transform:translateY(40px) scale(.95);filter:blur(10px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes sceneRotate{0%,100%{transform:rotateY(-15deg) rotateX(10deg)}50%{transform:rotateY(15deg) rotateX(5deg)}}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+    @keyframes terminalType{from{width:0}to{width:100%}}
+    @keyframes float3d{0%,100%{transform:translateY(0) rotateX(5deg)}50%{transform:translateY(-10px) rotateX(-5deg)}}
+    @keyframes glitch{0%,100%{transform:translate(0)}20%{transform:translate(-2px,2px)}40%{transform:translate(2px,-2px)}60%{transform:translate(-1px,-1px)}80%{transform:translate(1px,1px)}}
+
+    /* Reveal animations */
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.25,.46,.45,.94)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s ease,transform .8s cubic-bezier(.25,.46,.45,.94)}
+    .reveal-left.visible{opacity:1;transform:translateX(0)}
+    .reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s ease,transform .8s cubic-bezier(.25,.46,.45,.94)}
+    .reveal-right.visible{opacity:1;transform:translateX(0)}
+    .reveal-scale{opacity:0;transform:scale(.85);transition:opacity .8s ease,transform .8s cubic-bezier(.25,.46,.45,.94)}
+    .reveal-scale.visible{opacity:1;transform:scale(1)}
+
+    /* Staggered children */
+    .stagger-children .reveal:nth-child(1){transition-delay:.1s}
+    .stagger-children .reveal:nth-child(2){transition-delay:.2s}
+    .stagger-children .reveal:nth-child(3){transition-delay:.3s}
+    .stagger-children .reveal:nth-child(4){transition-delay:.4s}
+
+    /* Parallax sections */
+    .parallax-bg{transition:transform .1s linear}
+
+    /* Magnetic hover for buttons */
+    .magnetic{transition:transform .2s ease-out}
+  </style>
 </head>
-<body class="antialiased">
+<body>
 
-<!-- Scroll Progress -->
-<div id="scroll-progress"></div>
+  <!-- SNOW -->
+  <canvas id="snow-canvas"></canvas>
+  <svg id="snow-pile" height="80" preserveAspectRatio="none" viewBox="0 0 1440 80"><path d="" fill="rgba(255,255,255,0.85)" id="pile-path"/></svg>
 
-<!-- Minecraft Background Canvas -->
-<canvas id="minecraft-bg"></canvas>
-
-<!-- Floating Gradient Orbs -->
-<div class="gradient-orb" style="top: 20%; left: 20%; width: 400px; height: 400px; background: rgba(168, 85, 247, 0.2);"></div>
-<div class="gradient-orb" style="bottom: 30%; right: 20%; width: 350px; height: 350px; background: rgba(59, 130, 246, 0.15);"></div>
-<div class="gradient-orb" style="top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: rgba(236, 72, 153, 0.12);"></div>
-
-<!-- Navigation -->
-<nav class="fixed w-full z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
-    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-        <span class="text-2xl font-bold font-display tracking-wider neon-text cursor-pointer" onclick="scrollToTop()">MIKEY</span>
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
-            <a href="#about" class="nav-link hover:text-white">About</a>
-            <a href="#skills" class="nav-link hover:text-white">Skills</a>
-            <a href="#services" class="nav-link hover:text-white">Services</a>
-            <a href="#experience" class="nav-link hover:text-white">Experience</a>
-            <a href="#contact" class="nav-link hover:text-white">Contact</a>
-            <a href="https://discord.gg/6ggbj2cj8J" target="_blank" rel="noopener noreferrer" 
-               class="flex items-center gap-2 px-5 py-2.5 bg-[#5865F2] hover:bg-[#4752C4] transition-all rounded-xl font-medium text-white hover:shadow-lg hover:shadow-[#5865F2]/30 hover:-translate-y-1">
-                <i data-lucide="users" class="w-4 h-4"></i>
-                Join Discord
-            </a>
-        </div>
-        <button id="mobile-menu-btn" class="md:hidden text-white p-2">
-            <i data-lucide="menu" class="w-6 h-6"></i>
-        </button>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <button class="nav-logo text-gradient" onclick="window.scrollTo({top:0,behavior:'smooth'})">MIKEY</button>
+      <div class="nav-links">
+        <a href="#about">About</a><a href="#skills">Skills</a><a href="#services">Services</a><a href="#experience">Experience</a><a href="#contact">Contact</a>
+        <a href="https://discord.gg/infamous" target="_blank" class="nav-discord magnetic">Join Discord</a>
+      </div>
+      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
     </div>
-</nav>
-
-<!-- Hero Section -->
-<header class="min-h-screen flex flex-col items-center justify-center text-center px-6 relative overflow-hidden">
-    <!-- Floating MC Blocks -->
-    <div class="mc-block float" style="top: 15%; left: 10%; width: 40px; height: 40px; background: linear-gradient(135deg, rgba(34, 197, 94, 0.4), rgba(34, 197, 94, 0.15));"></div>
-    <div class="mc-block float-reverse" style="top: 25%; right: 15%; width: 30px; height: 30px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.4), rgba(245, 158, 11, 0.15)); animation-delay: 0.5s;"></div>
-    <div class="mc-block float" style="bottom: 30%; left: 15%; width: 50px; height: 50px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(168, 85, 247, 0.15)); animation-delay: 1s;"></div>
-    <div class="mc-block float-reverse" style="bottom: 25%; right: 10%; width: 25px; height: 25px; background: linear-gradient(135deg, rgba(6, 182, 212, 0.4), rgba(6, 182, 212, 0.15)); animation-delay: 0.8s;"></div>
-    
-    <!-- Sparkles -->
-    <div class="absolute top-1/3 left-1/4 sparkle"><i data-lucide="sparkles" class="w-6 h-6 text-purple-400/60"></i></div>
-    <div class="absolute bottom-1/3 right-1/4 sparkle" style="animation-delay: 1.5s;"><i data-lucide="sparkles" class="w-5 h-5 text-pink-400/60"></i></div>
-    
-    <div data-aos="zoom-in" data-aos-duration="800">
-        <h1 class="text-7xl md:text-9xl font-bold font-display mb-6 relative">
-            <span class="absolute inset-0 blur-3xl bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 opacity-50"></span>
-            <span class="relative neon-text gradient-text">MIKEY</span>
-        </h1>
+    <div class="mobile-menu glass" id="mobile-menu">
+      <a href="#about" onclick="closeMenu()">About</a><a href="#skills" onclick="closeMenu()">Skills</a><a href="#services" onclick="closeMenu()">Services</a><a href="#experience" onclick="closeMenu()">Experience</a><a href="#contact" onclick="closeMenu()">Contact</a>
     </div>
-    
-    <div class="text-xl md:text-2xl text-gray-400 font-light h-10 mb-4" data-aos="fade-up" data-aos-delay="200">
-        <span id="typed" class="text-white/80"></span>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb1 parallax-bg" data-speed="0.03"></div>
+    <div class="hero-orb2 parallax-bg" data-speed="-0.02"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge glass"><span class="dot"></span> Available for projects</div>
+      <h1><span class="text-gradient">MIKEY</span></h1>
+      <p>Building optimized, secure & scalable systems.<br><span>Infamous Studio</span> & <span>Infamous SMP</span></p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary magnetic">Contact Me</a>
+        <a href="#services" class="btn-secondary glass magnetic">My Services</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num text-gradient" data-count="1">0</div><div class="stat-label">Year Experience</div></div>
+        <div><div class="stat-num text-gradient" data-count="28">0</div><div class="stat-label">Projects Completed</div></div>
+        <div><div class="stat-num text-gradient" data-count="25">0</div><div class="stat-label">Satisfied Clients</div></div>
+      </div>
     </div>
-    
-    <p class="text-gray-500 max-w-md mb-12" data-aos="fade-up" data-aos-delay="300">
-        Building optimized, secure & scalable systems
-    </p>
-    
-    <div class="flex flex-col sm:flex-row gap-4" data-aos="fade-up" data-aos-delay="400">
-        <a href="#contact" class="btn-primary">Contact Me</a>
-        <a href="#services" class="btn-outline">
-            <span>My Service</span>
-        </a>
+    <div class="scroll-indicator"><span>Scroll</span><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-visual reveal-left">
+          <div class="about-visual-inner glass">
+            <div class="about-visual-bg">
+              <div class="orbit"><div class="orbit-dot" style="top:10%;left:50%"></div></div>
+              <div class="orbit"><div class="orbit-dot" style="bottom:20%;right:10%"></div></div>
+              <span class="text-gradient">M</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-text reveal-right">
+          <span class="section-label">About Me</span>
+          <h2>Passionate about building <span class="text-gradient">real systems</span></h2>
+          <p>I'm Mikey, the founder of Infamous Studio and Infamous SMP — focused on building real-world systems and scalable platforms. My core strengths lie in Linux environments, modern web development, and system architecture.</p>
+          <p>I enjoy building optimized systems — whether it's configuring a Linux server, developing a web platform, or managing a live environment with real users. My approach is simple: build, break, improve, and scale.</p>
+          <p>I'm continuously working on bigger projects with the goal of becoming a full-stack developer capable of building complete, production-ready systems from scratch.</p>
+        </div>
+      </div>
     </div>
-    
-    <a href="#stats" class="absolute bottom-10 text-gray-500 hover:text-purple-400 transition-colors flex flex-col items-center gap-2 cursor-pointer" data-aos="fade-up" data-aos-delay="600" style="animation: float 1.5s ease-in-out infinite;">
-        <span class="text-xs uppercase tracking-widest">Scroll</span>
-        <i data-lucide="arrow-down" class="w-6 h-6"></i>
-    </a>
-</header>
+  </section>
 
-<!-- Stats Section -->
-<section id="stats" class="max-w-4xl mx-auto px-6 mb-32">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="glass p-8 rounded-2xl text-center group relative overflow-hidden" data-aos="fade-up">
-            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="relative z-10 text-4xl md:text-5xl font-bold font-display text-purple-400 mb-2">
-                <span class="counter" data-target="1">1+</span>
-            </div>
-            <div class="relative z-10 text-sm text-gray-500 uppercase tracking-wider">Year Experience</div>
+  <!-- SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-label">Skills & Technologies</span>
+        <h2 class="section-title">What I <span class="text-gradient">Work With</span></h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skills-col reveal-left">
+          <h3>Proficiency</h3>
+          <div class="skill-item"><div class="skill-info"><span>HTML / CSS</span><span>95%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="95"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>JavaScript</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>Linux / Ubuntu</span><span>85%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>Tailwind CSS</span><span>80%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>Minecraft Servers</span><span>80%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>Discord Bots</span><span>80%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>React</span><span>55%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="55"></div></div></div>
+          <div class="skill-item"><div class="skill-info"><span>Java (Learning)</span><span>25%</span></div><div class="skill-bar"><div class="skill-bar-fill" data-width="25"></div></div></div>
         </div>
-        <div class="glass p-8 rounded-2xl text-center group relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="relative z-10 text-4xl md:text-5xl font-bold font-display text-blue-400 mb-2">
-                <span class="counter" data-target="28">28</span>+
-            </div>
-            <div class="relative z-10 text-sm text-gray-500 uppercase tracking-wider">Projects Completed</div>
+        <div class="skills-col reveal-right">
+          <h3>Tech Stack</h3>
+          <div class="tech-grid">
+            <div class="tech-item glass"><span class="icon">📄</span><span class="name">Paper/Purpur</span></div>
+            <div class="tech-item glass"><span class="icon">🦅</span><span class="name">Pterodactyl</span></div>
+            <div class="tech-item glass"><span class="icon">🌐</span><span class="name">Nginx</span></div>
+            <div class="tech-item glass"><span class="icon">📦</span><span class="name">Git</span></div>
+            <div class="tech-item glass"><span class="icon">💻</span><span class="name">VS Code</span></div>
+            <div class="tech-item glass"><span class="icon">🔐</span><span class="name">SSH</span></div>
+            <div class="tech-item glass"><span class="icon">🐳</span><span class="name">Docker</span></div>
+            <div class="tech-item glass"><span class="icon">🤖</span><span class="name">Discord.js</span></div>
+          </div>
         </div>
-        <div class="glass p-8 rounded-2xl text-center group relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <div class="absolute inset-0 bg-gradient-to-br from-pink-500/20 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="relative z-10 text-4xl md:text-5xl font-bold font-display text-pink-400 mb-2">
-                <span class="counter" data-target="25">25</span>+
-            </div>
-            <div class="relative z-10 text-sm text-gray-500 uppercase tracking-wider">Satisfied Clients</div>
-        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- About Section -->
-<section id="about" class="max-w-4xl mx-auto px-6 mb-32">
-    <div class="glass p-8 md:p-10 rounded-3xl border-l-4 border-purple-500 relative overflow-hidden group" data-aos="fade-right">
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/5 pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
-        <div class="absolute top-4 right-4 sparkle"><i data-lucide="sparkles" class="w-6 h-6 text-purple-400/30"></i></div>
-        
-        <div class="relative z-10">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-2 bg-purple-500/10 rounded-lg">
-                    <i data-lucide="user" class="w-6 h-6 text-purple-400"></i>
-                </div>
-                <h2 class="text-3xl font-bold font-display">
-                    <span class="gradient-text">About Me</span>
-                </h2>
+  <!-- SERVICES -->
+  <section class="section services-section" id="services">
+    <div class="services-glow"></div>
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-label">What I Do</span>
+        <h2 class="section-title">My <span class="text-gradient">Services</span></h2>
+      </div>
+      <div class="services-grid stagger-children">
+
+        <!-- Linux -->
+        <div class="service-card glass reveal">
+          <div class="scene-3d">
+            <div class="terminal" style="animation:float3d 5s ease-in-out infinite">
+              <div class="terminal-bar">
+                <div class="terminal-dot" style="background:#ff5f57"></div>
+                <div class="terminal-dot" style="background:#febc2e"></div>
+                <div class="terminal-dot" style="background:#28c840"></div>
+                <span style="color:#7a7a7a;font-size:.6rem;margin-left:8px">mikey@vps:~</span>
+              </div>
+              <div class="terminal-body" id="terminal-content">
+                <div><span class="prompt">$ </span><span class="cmd">sudo apt update</span></div>
+                <div><span class="output">Hit:1 http://archive.ubuntu.com</span></div>
+                <div><span class="prompt">$ </span><span class="cmd">ufw allow 22/tcp</span></div>
+                <div><span class="output">Rule added ✓</span></div>
+                <div><span class="prompt">$ </span><span class="cmd">systemctl status nginx</span></div>
+                <div><span class="output">● nginx.service - active (running)</span></div>
+                <div><span class="prompt">$ </span><span class="typing-cursor"></span></div>
+              </div>
             </div>
-            <p class="text-gray-400 leading-relaxed text-lg">
-                I'm a <span class="text-white font-medium"> I’m Mikey, the founder of Infamous Studio and Infamous SMP — focused on building real-world systems and scalable platforms.</span> My core strengths lie in Linux environments, modern web development, and system architecture, where I work on creating efficient, secure, and performance-driven solutions. I also have hands-on experience managing Minecraft networks and Discord communities, handling both technical and operational aspects. 
-                <span class="text-blue-400 font-medium">I enjoy building optimized systems — whether it’s configuring a Linux server, developing a web platform, or managing a live environment with real users. My approach is simple: build, break, improve, and scale.</span>,
-               
-            </p>
-            <p class="text-gray-400 leading-relaxed text-lg mt-6">
-                I’m continuously working on bigger projects with the goal of becoming a full-stack developer capable of building complete, production-ready systems from scratch.
-            </p>
+          </div>
+          <h3>Linux & VPS Handling</h3>
+          <p>Setting up secure and stable VPS environments — SSH, firewalls, system hardening, monitoring, and performance optimization.</p>
         </div>
-        
-        <div class="mc-block absolute -bottom-2 -right-2 w-16 h-16 bg-purple-500/5 border-purple-500/10" style="animation: float 4s ease-in-out infinite;"></div>
-        <div class="mc-block absolute -bottom-4 -right-8 w-8 h-8 bg-blue-500/10 border-blue-500/10" style="animation: floatReverse 3s ease-in-out infinite 0.5s;"></div>
+
+        <!-- Minecraft -->
+        <div class="service-card glass reveal">
+          <div class="scene-3d">
+            <div class="mc-scene" style="animation:float3d 6s ease-in-out infinite .5s">
+              <!-- Dirt/Grass blocks stack -->
+              <div style="display:flex;flex-direction:column;gap:0;transform-style:preserve-3d">
+                <div class="mc-block dirt" style="transform:translateY(4px)">
+                  <div class="mc-face mc-front" style="background:#4a7c2f">🌿</div>
+                  <div class="mc-face mc-back"></div><div class="mc-face mc-left"></div><div class="mc-face mc-right"></div>
+                  <div class="mc-face mc-top" style="background:#5a9c3f"></div><div class="mc-face mc-bottom"></div>
+                </div>
+              </div>
+              <!-- Creeper -->
+              <div style="transform-style:preserve-3d;margin:0 12px">
+                <div style="width:44px;transform-style:preserve-3d">
+                  <div class="mc-block" style="width:44px;height:44px;margin:0 auto">
+                    <div class="mc-face mc-front" style="width:44px;height:44px;background:#3daa3d;transform:translateZ(22px);font-size:1.1rem;color:#000;text-shadow:0 0 3px rgba(0,0,0,.5)">😐</div>
+                    <div class="mc-face mc-back" style="width:44px;height:44px;background:#3daa3d;transform:rotateY(180deg) translateZ(22px)"></div>
+                    <div class="mc-face mc-left" style="width:44px;height:44px;background:#2d8a2d;transform:rotateY(-90deg) translateZ(22px)"></div>
+                    <div class="mc-face mc-right" style="width:44px;height:44px;background:#2d8a2d;transform:rotateY(90deg) translateZ(22px)"></div>
+                    <div class="mc-face mc-top" style="width:44px;height:44px;background:#4dcc4d;transform:rotateX(90deg) translateZ(22px)"></div>
+                    <div class="mc-face mc-bottom" style="width:44px;height:44px;background:#2a7a2a;transform:rotateX(-90deg) translateZ(22px)"></div>
+                  </div>
+                  <div class="mc-block" style="width:34px;height:50px;margin:0 auto">
+                    <div class="mc-face mc-front" style="width:34px;height:50px;background:#3daa3d;transform:translateZ(17px)"></div>
+                    <div class="mc-face mc-back" style="width:34px;height:50px;background:#3daa3d;transform:rotateY(180deg) translateZ(17px)"></div>
+                    <div class="mc-face mc-left" style="width:34px;height:50px;background:#2d8a2d;transform:rotateY(-90deg) translateZ(17px)"></div>
+                    <div class="mc-face mc-right" style="width:34px;height:50px;background:#2d8a2d;transform:rotateY(90deg) translateZ(17px)"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- TNT -->
+              <div class="mc-block" style="width:45px;height:45px">
+                <div class="mc-face mc-front" style="width:45px;height:45px;background:#cc2222;transform:translateZ(22.5px);color:#fff;font-size:.7rem;font-weight:700">TNT</div>
+                <div class="mc-face mc-back" style="width:45px;height:45px;background:#cc2222;transform:rotateY(180deg) translateZ(22.5px)"></div>
+                <div class="mc-face mc-left" style="width:45px;height:45px;background:#aa1a1a;transform:rotateY(-90deg) translateZ(22.5px)"></div>
+                <div class="mc-face mc-right" style="width:45px;height:45px;background:#aa1a1a;transform:rotateY(90deg) translateZ(22.5px)"></div>
+                <div class="mc-face mc-top" style="width:45px;height:45px;background:#dd3333;transform:rotateX(90deg) translateZ(22.5px)"></div>
+                <div class="mc-face mc-bottom" style="width:45px;height:45px;background:#991111;transform:rotateX(-90deg) translateZ(22.5px)"></div>
+              </div>
+              <!-- Stone -->
+              <div class="mc-block stone" style="margin-left:8px">
+                <div class="mc-face mc-front" style="transform:translateZ(25px)">⛏️</div>
+                <div class="mc-face mc-back"></div><div class="mc-face mc-left" style="background:#666"></div>
+                <div class="mc-face mc-right" style="background:#666"></div>
+                <div class="mc-face mc-top" style="background:#888"></div><div class="mc-face mc-bottom" style="background:#555"></div>
+              </div>
+            </div>
+          </div>
+          <h3>Minecraft Server Setup</h3>
+          <p>Complete server setups with Paper/Purpur, plugin configuration, permissions, performance tuning for smooth gameplay.</p>
+        </div>
+
+        <!-- Discord -->
+        <div class="service-card glass reveal">
+          <div class="scene-3d">
+            <div class="discord-scene" style="animation:float3d 5s ease-in-out infinite 1s">
+              <div class="discord-sidebar">
+                <div style="color:#fff;font-weight:700;font-size:.6rem;margin-bottom:4px">Infamous SMP</div>
+                <div class="discord-channel"># welcome</div>
+                <div class="discord-channel active"># general</div>
+                <div class="discord-channel"># support</div>
+                <div class="discord-channel"># tickets</div>
+                <div class="discord-channel"># announcements</div>
+              </div>
+              <div class="discord-chat">
+                <div class="discord-msg">
+                  <div class="discord-avatar" style="background:var(--primary)"></div>
+                  <div class="discord-msg-content"><div class="discord-msg-name" style="color:var(--primary)">Mikey</div><div class="discord-msg-text">Server is live! 🚀</div></div>
+                </div>
+                <div class="discord-msg">
+                  <div class="discord-avatar" style="background:var(--accent)"></div>
+                  <div class="discord-msg-content"><div class="discord-msg-name" style="color:var(--accent)">Bot</div><div class="discord-msg-text">✅ Ticket created #0042</div></div>
+                </div>
+                <div class="discord-msg">
+                  <div class="discord-avatar" style="background:#e879a4"></div>
+                  <div class="discord-msg-content"><div class="discord-msg-name" style="color:#e879a4">Member</div><div class="discord-msg-text">This is so cool!</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3>Discord Management</h3>
+          <p>Building organized Discord servers with ticket systems, moderation tools, role hierarchies, and bot automation.</p>
+        </div>
+
+        <!-- Web Dev -->
+        <div class="service-card glass reveal">
+          <div class="scene-3d">
+            <div class="web-scene" style="animation:float3d 5s ease-in-out infinite 1.5s">
+              <div class="code-window">
+                <div class="code-bar">
+                  <div class="terminal-dot" style="background:#ff5f57"></div>
+                  <div class="terminal-dot" style="background:#febc2e"></div>
+                  <div class="terminal-dot" style="background:#28c840"></div>
+                  <div class="code-tab">index.html</div>
+                </div>
+                <div class="code-body">
+                  <div><span class="comment">&lt;!-- Beautiful code --&gt;</span></div>
+                  <div><span class="tag">&lt;div</span> <span class="attr">class=</span><span class="str">"hero"</span><span class="tag">&gt;</span></div>
+                  <div>&nbsp;&nbsp;<span class="tag">&lt;h1&gt;</span>Hello World<span class="tag">&lt;/h1&gt;</span></div>
+                  <div>&nbsp;&nbsp;<span class="tag">&lt;p&gt;</span>Built with ❤️<span class="tag">&lt;/p&gt;</span></div>
+                  <div>&nbsp;&nbsp;<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="str">"launch()"</span><span class="tag">&gt;</span></div>
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;🚀 Deploy<span class="tag">&lt;/button&gt;</span></div>
+                  <div><span class="tag">&lt;/div&gt;</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3>Web Development</h3>
+          <p>Professional, fully customized websites — from portfolios to server stores. Modern, responsive, and optimized.</p>
+        </div>
+
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Skills Section - FIXED WITH VISIBLE COLORED BARS -->
-<section id="skills" class="max-w-6xl mx-auto px-6 mb-32">
-    <h2 class="section-title font-display" data-aos="fade-up">
-        <span class="gradient-text">Skills & Technologies</span>
-    </h2>
-    
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- Skill Bars -->
-        <div class="space-y-6">
-            <h3 class="text-xl font-bold mb-6 flex items-center gap-2" data-aos="fade-right">
-                <span class="w-2 h-2 bg-purple-500 rounded-full pulse-dot"></span>
-                Proficiency
-            </h3>
-            
-            <!-- Linux -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="50">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">Linux / Ubuntu</span>
-                    <span class="text-orange-400 text-sm font-semibold">85%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-orange-500 to-orange-600" style="width: 85%;" data-width="85%"></div>
-                </div>
-            </div>
-            
-            <!-- Minecraft -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="100">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">Minecraft Servers</span>
-                    <span class="text-green-400 text-sm font-semibold">80%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-green-500 to-emerald-600" style="width: 80%;" data-width="90%"></div>
-                </div>
-            </div>
-            
-            <!-- Discord Bots -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="150">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">Discord Bots</span>
-                    <span class="text-purple-400 text-sm font-semibold">80%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-indigo-500 to-purple-600" style="width: 80%;" data-width="80%"></div>
-                </div>
-            </div>
-            
-            <!-- HTML/CSS -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="200">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">HTML / CSS</span>
-                    <span class="text-blue-400 text-sm font-semibold">95%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-blue-500 to-cyan-500" style="width: 95%;" data-width="85%"></div>
-                </div>
-            </div>
-            
-            <!-- Tailwind -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="250">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">Tailwind CSS</span>
-                    <span class="text-cyan-400 text-sm font-semibold">80%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-cyan-500 to-teal-500" style="width: 80%;" data-width="80%"></div>
-                </div>
-            </div>
-            
-            <!-- JavaScript -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="300">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">JavaScript</span>
-                    <span class="text-yellow-400 text-sm font-semibold">85%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-yellow-500 to-orange-500" style="width: 85%;" data-width="65%"></div>
-                </div>
-            </div>
-            
-            <!-- React -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="350">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">React</span>
-                    <span class="text-cyan-400 text-sm font-semibold">55%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-cyan-400 to-blue-500" style="width: 55%;" data-width="55%"></div>
-                </div>
-            </div>
-            
-            <!-- Java -->
-            <div class="skill-item" data-aos="fade-right" data-aos-delay="400">
-                <div class="flex justify-between mb-2">
-                    <span class="font-medium text-sm text-white">Java (Learning)</span>
-                    <span class="text-red-400 text-sm font-semibold">25%</span>
-                </div>
-                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
-                    <div class="skill-bar-fill bg-gradient-to-r from-red-500 to-orange-600" style="width: 25%;" data-width="25%"></div>
-                </div>
-            </div>
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <div class="section-inner">
+      <div class="section-header reveal">
+        <span class="section-label">Experience</span>
+        <h2 class="section-title">Where I've <span class="text-gradient">Grown</span></h2>
+      </div>
+      <div class="exp-grid">
+        <div class="exp-card glass reveal-left">
+          <div class="exp-header"><span class="icon">🌐</span><h3>Web Development</h3></div>
+          <ul class="exp-list">
+            <li>Strong foundation in HTML, CSS, and JavaScript</li>
+            <li>Building clean, responsive UI with structured layouts</li>
+            <li>Creating interactive features and dynamic experiences</li>
+            <li>Working on real-world projects continuously</li>
+          </ul>
         </div>
-        
-        <!-- Tech Stack Grid -->
-        <div>
-            <h3 class="text-xl font-bold mb-6 flex items-center gap-2" data-aos="fade-left">
-                <span class="w-2 h-2 bg-blue-500 rounded-full pulse-dot"></span>
-                Tech Stack
-            </h3>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="50">
-                    <span class="text-2xl">📄</span>
-                    <span class="font-medium text-sm">Paper/Purpur</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="100">
-                    <span class="text-2xl">🦅</span>
-                    <span class="font-medium text-sm">Pterodactyl</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="150">
-                    <span class="text-2xl">🌐</span>
-                    <span class="font-medium text-sm">Nginx</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="200">
-                    <span class="text-2xl">📦</span>
-                    <span class="font-medium text-sm">Git</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="250">
-                    <span class="text-2xl">💻</span>
-                    <span class="font-medium text-sm">VS Code</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="300">
-                    <span class="text-2xl">🔐</span>
-                    <span class="font-medium text-sm">SSH</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="350">
-                    <span class="text-2xl">🐳</span>
-                    <span class="font-medium text-sm">Docker</span>
-                </div>
-                <div class="glass p-4 rounded-xl flex items-center gap-3 cursor-default" data-aos="zoom-in" data-aos-delay="400">
-                    <span class="text-2xl">🤖</span>
-                    <span class="font-medium text-sm">Discord.js</span>
-                </div>
-            </div>
-            
-            <div class="mt-8 relative h-32" data-aos="fade-up" data-aos-delay="500">
-                <div class="mc-block absolute left-4 top-0 w-12 h-12 bg-gradient-to-br from-purple-500/30 to-purple-500/10 border-purple-500/20" style="animation: float 4s ease-in-out infinite;"></div>
-                <div class="mc-block absolute left-20 top-8 w-8 h-8 bg-gradient-to-br from-blue-500/30 to-blue-500/10 border-blue-500/20" style="animation: floatReverse 3s ease-in-out infinite 0.5s;"></div>
-                <div class="mc-block absolute right-20 top-4 w-10 h-10 bg-gradient-to-br from-pink-500/30 to-pink-500/10 border-pink-500/20" style="animation: float 5s ease-in-out infinite 1s;"></div>
-                <div class="mc-block absolute right-4 top-12 w-6 h-6 bg-gradient-to-br from-green-500/30 to-green-500/10 border-green-500/20" style="animation: floatReverse 3.5s ease-in-out infinite 0.8s;"></div>
-            </div>
+        <div class="exp-card glass reveal-right">
+          <div class="exp-header"><span class="icon">🐧</span><h3>Linux & System Environment</h3></div>
+          <ul class="exp-list">
+            <li>Managing Linux-based systems and server environments</li>
+            <li>Understanding hosting, file systems, and services</li>
+            <li>Running and maintaining web projects in production</li>
+            <li>Learning performance optimization and stability</li>
+          </ul>
         </div>
+      </div>
+      <div class="roadmap glass reveal-scale">
+        <div class="roadmap-glow"></div>
+        <span class="section-label" style="color:var(--accent)">Roadmap</span>
+        <h3>Future Goals</h3>
+        <p>My long-term vision is to become a highly skilled Java developer and specialize in building advanced, scalable systems. I aim to develop custom Minecraft plugins, full-stack applications, and performance-focused platforms.</p>
+        <p>I believe in continuous learning, consistency, and building impactful projects — constantly improving while taking on bigger challenges.</p>
+        <div class="roadmap-badge"><span class="dot"></span> Progress: Learning Phase</div>
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Services Section -->
-<section id="services" class="max-w-6xl mx-auto px-6 mb-32">
-    <div class="text-center mb-12" data-aos="fade-up">
-        <span class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full text-purple-400 text-sm font-medium mb-4">
-            <i data-lucide="zap" class="w-4 h-4"></i>
-            What I Do
-        </span>
-        <h2 class="section-title font-display mb-0">
-            <span class="gradient-text">Services</span>
-        </h2>
+  <!-- CONTACT -->
+  <section class="section contact" id="contact">
+    <div class="contact-glow"></div>
+    <div class="contact-inner reveal-scale">
+      <span class="section-label">Let's Connect</span>
+      <h2>Let's Work <span class="text-gradient">Together</span></h2>
+      <p>Ready to start a project? Get in touch!</p>
+      </div>
+      <div class="contact-email">ogmikey.fr</div>
     </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="glass p-8 rounded-2xl group cursor-default" data-aos="fade-up">
-            <div class="card-icon bg-purple-500/10 text-purple-400 mb-6">
-                <i data-lucide="server" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 group-hover:text-white transition-colors">Linux & VPS Handling</h3>
-            <p class="text-sm text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">
-                I work with VPS environments by setting up secure and stable systems designed for long-term performance. This includes configuring SSH access, applying firewall rules, and implementing basic system hardening to ensure security. I also focus on service management, monitoring, and performance optimization so that the server runs efficiently with minimal downtime..
-            </p>
-        </div>
-        
-        <div class="glass p-8 rounded-2xl group cursor-default" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-icon bg-blue-500/10 text-blue-400 mb-6">
-                <i data-lucide="box" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 group-hover:text-white transition-colors">Minecraft Server Setup</h3>
-            <p class="text-sm text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">
-                I handle complete Minecraft server setups, from choosing optimized software like Paper or Purpur to configuring plugins and permissions. My focus is on creating a smooth and lag-free gameplay experience by tuning performance, optimizing resources, and ensuring the server runs reliably for both private and public use.
-            </p>
-        </div>
-        
-        <div class="glass p-8 rounded-2xl group cursor-default" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-icon bg-pink-500/10 text-pink-400 mb-6">
-                <i data-lucide="message-square" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 group-hover:text-white transition-colors">Discord Management</h3>
-            <p class="text-sm text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">
-                I build and manage Discord servers with clean structures and organized layouts to support growing communities. This includes setting up ticket systems, moderation tools, role hierarchies, and automation using bots, ensuring the server remains active, secure, and easy to manage
-            </p>
-        </div>
-        
-        <div class="glass p-8 rounded-2xl group cursor-default" data-aos="fade-up" data-aos-delay="300">
-            <div class="card-icon bg-green-500/10 text-green-400 mb-6">
-                <i data-lucide="code" class="w-6 h-6"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3 group-hover:text-white transition-colors">Web Development</h3>
-            <p class="text-sm text-gray-500 leading-relaxed group-hover:text-gray-400 transition-colors">
-                I create professional, fully customized websites tailored to each client’s needs. From sleek portfolios to server stores with ranks and packages, my designs are modern, user-friendly, and optimized for smooth performance. I focus on delivering high-quality, visually appealing websites that help gaming communities, small businesses, and creators stand out online — all at affordable rates.
-            </p>
-        </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2025 Mikey. All rights reserved.</span>
+      <span class="footer-logo text-gradient">MIKEY</span>
     </div>
-</section>
+  </footer>
 
-<!-- Experience Section -->
-<section id="experience" class="max-w-6xl mx-auto px-6 mb-32">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div data-aos="fade-right">
-            <h2 class="text-3xl font-bold font-display mb-8 flex items-center gap-3">
-                <span class="p-2 rounded-lg bg-purple-500/10">
-                    <i data-lucide="briefcase" class="w-6 h-6 text-purple-400"></i>
-                </span>
-                <span class="gradient-text"🛠️ >Experience</span>
-            </h2>
-            <div class="space-y-6">
-                <div class="glass p-6 rounded-xl relative overflow-hidden group cursor-default">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="flex items-start gap-4 relative z-10">
-                        <span class="text-2xl">🌐</span>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
-                                Web Development
-                                <i data-lucide="chevron-right" class="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-purple-400"></i>
-                            </h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                               
-Strong foundation in HTML, CSS, and JavaScript
-Building clean, responsive UI with structured layouts
-Creating interactive features and dynamic user experiences
-Working on real-world projects and continuously improving frontend skills
-
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass p-6 rounded-xl relative overflow-hidden group cursor-default">
-                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="flex items-start gap-4 relative z-10">
-                        <span class="text-2xl">🐧</span>
-                        <div>
-                            <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
-                                Linux & System Environment
-                                <i data-lucide="chevron-right" class="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-purple-400"></i>
-                            </h3>
-                            <p class="text-gray-400 text-sm leading-relaxed">
-                                
-                              Managing Linux-based systems and basic server environments
-Understanding hosting, file systems, and service handling
-Running and maintaining web projects in real environments
-Learning performance optimization and system stability
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div data-aos="fade-left">
-            <h2 class="text-3xl font-bold font-display mb-8 flex items-center gap-3">
-                <span class="p-2 rounded-lg bg-blue-500/10">
-                    <i data-lucide="target" class="w-6 h-6 text-blue-400"></i>
-                </span>
-                <span class="gradient-text">Future Goals</span>
-            </h2>
-            <div class="glass p-8 rounded-2xl border-2 border-blue-500/20 relative overflow-hidden group" style="min-height: calc(100% - 5rem);">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/5 pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
-                <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-500/20 rounded-full blur-3xl"></div>
-                
-                <div class="relative z-10">
-                    <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 rounded-full text-blue-400 text-sm font-medium mb-4">
-                        <i data-lucide="rocket" class="w-4 h-4"></i>
-                        Roadmap
-                    </span>
-                    <p class="text-gray-400 leading-relaxed mb-6">
-                        
-                        My long-term vision is to become a highly skilled Java developer and specialize in building advanced, scalable systems. I aim to develop custom Minecraft plugins, full-stack applications, and performance-focused platforms that can handle real-world usage.
-
-                  </p>Beyond that, I’m focused on growing into a full-stack developer, capable of designing, developing, and deploying complete solutions — from backend architecture to user-facing interfaces.</p>
-
-</p1> I believe in continuous learning, consistency, and building impactful projects, and I’m committed to constantly improving my skills while taking on bigger and more complex challenges over time..</p1>
-                    </p>
-                    <p class="text-gray-400 leading-relaxed">
-                        I aim to continuously improve, build bigger projects and never stop learning.
-                    </p>
-                    
-                    <div class="mt-6 flex gap-2">
-                        <div class="h-1 rounded-full flex-1 bg-blue-500 progress-bar" style="transform: scaleX(0); transform-origin: left;"></div>
-                        <div class="h-1 rounded-full flex-1 bg-blue-500 progress-bar" style="transform: scaleX(0); transform-origin: left;"></div>
-                        <div class="h-1 rounded-full flex-1 bg-white/10"></div>
-                        <div class="h-1 rounded-full flex-1 bg-white/10"></div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">Progress: Learning Phase</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact Section - FIXED WITH USERNAME DISPLAYED -->
-<section id="contact" class="max-w-2xl mx-auto px-6 mb-20 text-center">
-    <div class="glass p-12 rounded-3xl relative overflow-hidden group" data-aos="zoom-in">
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10 pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
-        
-        <div class="absolute top-4 left-4 sparkle"><i data-lucide="sparkles" class="w-5 h-5 text-purple-400/40"></i></div>
-        <div class="absolute top-8 right-8 sparkle" style="animation-delay: 1s;"><i data-lucide="sparkles" class="w-4 h-4 text-pink-400/40"></i></div>
-        
-        <span class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full text-purple-400 text-sm font-medium mb-6 relative z-10">
-            <i data-lucide="message-circle" class="w-4 h-4"></i>
-            Let's Connect
-        </span>
-        
-        <h2 class="text-4xl font-bold font-display mb-6 relative z-10">
-            <span class="gradient-text">Let's Work Together</span>
-        </h2>
-        <p class="text-gray-500 mb-8 relative z-10">Ready to start a project? Get in touch!</p>
-        
-        <button onclick="copyDiscord()" class="inline-flex items-center gap-3 px-8 py-4 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 hover:border-purple-500/30 transition-all duration-300 group/btn relative z-10 cursor-pointer hover:shadow-lg hover:shadow-purple-500/20 hover:-translate-y-1">
-            <i data-lucide="disc" class="w-5 h-5 text-purple-400 group-hover/btn:rotate-12 transition-transform"></i>
-            <span class="font-bold text-lg text-white">ogmikey.fr</span>
-            <i data-lucide="copy" id="copy-icon" class="w-5 h-5 text-gray-500 group-hover/btn:text-purple-400 transition-colors ml-2"></i>
-        </button>
-        <p id="copy-msg" class="text-green-400 text-sm mt-4 opacity-0 transition-opacity duration-300 relative z-10">✓ Copied to clipboard!</p>
-        
-        <div class="mc-block absolute -bottom-4 -left-4 w-20 h-20 bg-purple-500/10 border-purple-500/20" style="animation: float 6s ease-in-out infinite;"></div>
-        <div class="mc-block absolute -top-4 -right-4 w-16 h-16 bg-pink-500/10 border-pink-500/20" style="animation: floatReverse 5s ease-in-out infinite 0.5s;"></div>
-        <div class="mc-block absolute bottom-8 right-4 w-8 h-8 bg-blue-500/10 border-blue-500/20" style="animation: float 4s ease-in-out infinite 1s;"></div>
-    </div>
-</section>
-
-<!-- Footer - FIXED BACK TO TOP -->
-<footer class="border-t border-white/5 py-8">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <span class="text-xl font-bold font-display neon-text">MIKEY</span>
-                <span class="text-gray-500 text-sm">© 2025.All Right reserved</span>
-            </div>
-            <button onclick="scrollToTop()" class="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-sm text-gray-500 hover:text-white transition-all group cursor-pointer hover:-translate-y-1">
-                <i data-lucide="arrow-up" class="w-4 h-4 group-hover:-translate-y-1 transition-transform"></i>
-                Back to top
-            </button>
-        </div>
-        <div class="mt-6 h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent"></div>
-    </div>
-</footer>
-
-<script>
-    // Initialize Lucide icons
-    lucide.createIcons();
-    
-    // Initialize AOS
-    AOS.init({ 
-        duration: 600, 
-        once: true,
-        offset: 80,
-        easing: 'ease-out'
-    });
-    
-    // Typed.js
-    new Typed('#typed', {
-        strings: [
-            'Linux Enthusiast 🐧',
-            'Minecraft Server Expert ⛏️',
-            'Discord Manager 💬',
-            'Web Developer 💻',
-            'Future Java Developer ☕'
-        ],
-        typeSpeed: 50,
-        backSpeed: 30,
-        backDelay: 2000,
-        loop: true
-    });
-    
-    // Minecraft Background Canvas
-    const canvas = document.getElementById('minecraft-bg');
+  <script>
+    // ===== SNOWFALL WITH PILE =====
+    const canvas = document.getElementById('snow-canvas');
     const ctx = canvas.getContext('2d');
-    
-    const BLOCK_COLORS = [
-        "#8B5A2B", "#4A4A4A", "#228B22", "#654321", 
-        "#FFD700", "#00CED1", "#a855f7", "#3b82f6"
-    ];
-    
-    let blocks = [];
-    
+    let W, H;
+    const snowflakes = [];
+    const MAX_SNOW = 200;
+    const pileHeight = new Float32Array(1440); // pile height per x-column
+
     function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initBlocks();
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
     }
-    
-    function createBlock() {
-        return {
-            x: Math.random() * canvas.width,
-            y: -50,
-            size: Math.random() * 20 + 10,
-            color: BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)],
-            speed: Math.random() * 1 + 0.5,
-            rotation: Math.random() * Math.PI * 2,
-            rotationSpeed: (Math.random() - 0.5) * 0.02,
-            opacity: Math.random() * 0.3 + 0.1
-        };
-    }
-    
-    function initBlocks() {
-        blocks = [];
-        const blockCount = Math.floor((canvas.width * canvas.height) / 25000);
-        for (let i = 0; i < blockCount; i++) {
-            const block = createBlock();
-            block.y = Math.random() * canvas.height;
-            blocks.push(block);
-        }
-    }
-    
-    function drawBlock(block) {
-        ctx.save();
-        ctx.translate(block.x + block.size / 2, block.y + block.size / 2);
-        ctx.rotate(block.rotation);
-        ctx.globalAlpha = block.opacity;
-        
-        ctx.fillStyle = block.color;
-        ctx.fillRect(-block.size / 2, -block.size / 2, block.size, block.size);
-        
-        ctx.fillStyle = "rgba(0,0,0,0.3)";
-        const pixelSize = block.size / 4;
-        ctx.fillRect(-block.size / 2, block.size / 2 - pixelSize, block.size, pixelSize);
-        ctx.fillRect(block.size / 2 - pixelSize, -block.size / 2, pixelSize, block.size);
-        
-        ctx.fillStyle = "rgba(255,255,255,0.2)";
-        ctx.fillRect(-block.size / 2, -block.size / 2, block.size, pixelSize);
-        ctx.fillRect(-block.size / 2, -block.size / 2, pixelSize, block.size);
-        
-        ctx.restore();
-    }
-    
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        blocks.forEach((block, index) => {
-            block.y += block.speed;
-            block.rotation += block.rotationSpeed;
-            
-            if (block.y > canvas.height + 50) {
-                blocks[index] = createBlock();
-            }
-            
-            drawBlock(block);
-        });
-        
-        requestAnimationFrame(animate);
-    }
-    
-    resizeCanvas();
-    animate();
     window.addEventListener('resize', resizeCanvas);
-    
-    // Scroll Progress
-    window.addEventListener('scroll', () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const progress = scrollTop / scrollHeight;
-        document.getElementById('scroll-progress').style.transform = `scaleX(${progress})`;
-    });
-    
-    // Counter Animation
-    const counters = document.querySelectorAll('.counter');
-    const observerOptions = { threshold: 0.5 };
-    
-    const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const counter = entry.target;
-                const target = parseInt(counter.dataset.target);
-                let count = 0;
-                const duration = 2000;
-                const increment = target / (duration / 16);
-                
-                const updateCounter = () => {
-                    count += increment;
-                    if (count >= target) {
-                        counter.textContent = target;
-                    } else {
-                        counter.textContent = Math.floor(count);
-                        requestAnimationFrame(updateCounter);
-                    }
-                };
-                updateCounter();
-                counterObserver.unobserve(counter);
-            }
-        });
-    }, observerOptions);
-    
-    counters.forEach(counter => counterObserver.observe(counter));
-    
-    // Skill Bar Animation - FIXED
-    const skillBars = document.querySelectorAll('.skill-bar-fill');
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const bar = entry.target;
-                const delay = Array.from(skillBars).indexOf(bar) * 100 + 300;
-                setTimeout(() => {
-                    bar.style.width = bar.dataset.width;
-                }, delay);
-                skillObserver.unobserve(bar);
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    skillBars.forEach(bar => skillObserver.observe(bar));
-    
-    // Progress bars animation
-    const progressBars = document.querySelectorAll('.progress-bar');
-    const progressObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                progressBars.forEach((bar, i) => {
-                    setTimeout(() => {
-                        bar.style.transition = 'transform 0.5s ease-out';
-                        bar.style.transform = 'scaleX(1)';
-                    }, 800 + i * 100);
-                });
-                progressObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-    
-    progressBars.forEach(bar => progressObserver.observe(bar));
-    
-    // FIXED: Copy Discord Function
-    function copyDiscord() {
-        const discordName = 'ogmikey.fr';
-        const textArea = document.createElement('textarea');
-        textArea.value = discordName;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-9999px';
-        textArea.style.opacity = '0';
-        document.body.appendChild(textArea);
-        textArea.select();
-        textArea.setSelectionRange(0, 99999);
-        
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                const msg = document.getElementById('copy-msg');
-                const icon = document.getElementById('copy-icon');
-                msg.style.opacity = '1';
-                icon.setAttribute('data-lucide', 'check');
-                icon.classList.add('text-green-400');
-                icon.classList.remove('text-gray-500');
-                lucide.createIcons();
-                
-                setTimeout(() => {
-                    msg.style.opacity = '0';
-                    icon.setAttribute('data-lucide', 'copy');
-                    icon.classList.remove('text-green-400');
-                    icon.classList.add('text-gray-500');
-                    lucide.createIcons();
-                }, 2500);
-            }
-        } catch (err) {
-            console.error('Copy failed:', err);
+    resizeCanvas();
+
+    class Snowflake {
+      constructor() { this.reset(true); }
+      reset(init) {
+        this.x = Math.random() * W;
+        this.y = init ? Math.random() * -H : -10;
+        this.r = Math.random() * 3 + 1;
+        this.speed = Math.random() * 1.5 + 0.5;
+        this.wind = Math.random() * 0.5 - 0.25;
+        this.opacity = Math.random() * 0.6 + 0.4;
+        this.swing = Math.random() * 2;
+        this.swingSpeed = Math.random() * 0.02 + 0.01;
+        this.t = Math.random() * Math.PI * 2;
+      }
+      update() {
+        this.t += this.swingSpeed;
+        this.x += this.wind + Math.sin(this.t) * this.swing * 0.3;
+        this.y += this.speed;
+
+        // Check pile collision
+        const col = Math.floor((this.x / W) * 1440);
+        const pileY = H - (pileHeight[Math.max(0, Math.min(1439, col))] || 0);
+        if (this.y + this.r >= pileY) {
+          // Add to pile
+          const c = Math.max(0, Math.min(1439, col));
+          for (let i = -2; i <= 2; i++) {
+            const ci = Math.max(0, Math.min(1439, c + i));
+            pileHeight[ci] += (3 - Math.abs(i)) * 0.15;
+          }
+          // Cap pile height
+          if (pileHeight[c] > 70) pileHeight[c] = 70;
+          this.reset(false);
         }
-        
-        document.body.removeChild(textArea);
+        if (this.x < -10 || this.x > W + 10) this.reset(false);
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${this.opacity})`;
+        ctx.fill();
+      }
     }
-    
-    // FIXED: Scroll to Top Function  
-    function scrollToTop() {
-        window.scrollTo({ 
-            top: 0, 
-            behavior: 'smooth' 
-        });
+
+    for (let i = 0; i < MAX_SNOW; i++) snowflakes.push(new Snowflake());
+
+    function updatePileSVG() {
+      const svg = document.getElementById('pile-path');
+      const step = Math.ceil(1440 / (W || 1440));
+      let d = `M0,80 `;
+      for (let i = 0; i < 1440; i += step) {
+        const x = (i / 1440) * W;
+        const y = 80 - (pileHeight[i] || 0);
+        d += `L${x.toFixed(1)},${y.toFixed(1)} `;
+      }
+      d += `L${W},80 Z`;
+      svg.setAttribute('d', d);
+      document.getElementById('snow-pile').setAttribute('width', W);
     }
-    
-    // Active Nav Link
-    const sections = document.querySelectorAll('section[id]');
+
+    let frameCount = 0;
+    function animateSnow() {
+      ctx.clearRect(0, 0, W, H);
+      snowflakes.forEach(s => { s.update(); s.draw(); });
+      frameCount++;
+      if (frameCount % 10 === 0) updatePileSVG();
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
+
+    // ===== NAVBAR =====
     window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        sections.forEach(section => {
-            const sectionHeight = section.offsetHeight;
-            const sectionTop = section.offsetTop - 200;
-            const sectionId = section.getAttribute('id');
-            const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-            
-            if (navLink) {
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLink.classList.add('active');
-                } else {
-                    navLink.classList.remove('active');
-                }
-            }
-        });
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+    function closeMenu() { document.getElementById('mobile-menu').classList.remove('open'); }
+
+    // ===== SCROLL REVEAL =====
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+            bar.style.width = bar.dataset.width + '%';
+            setTimeout(() => bar.classList.add('animated'), 800);
+          });
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el => revealObserver.observe(el));
+
+    // ===== COUNTER ANIMATION =====
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count);
+          let current = 0;
+          const step = Math.max(1, Math.floor(target / 40));
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) { current = target; clearInterval(timer); }
+            el.textContent = current + '+';
+          }, 40);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
+
+    // ===== MAGNETIC HOVER =====
+    document.querySelectorAll('.magnetic').forEach(el => {
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left - r.width / 2) * 0.15;
+        const y = (e.clientY - r.top - r.height / 2) * 0.15;
+        el.style.transform = `translate(${x}px, ${y}px) scale(1.03)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+      });
     });
 
-</script>
+    // ===== PARALLAX ORBS =====
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      document.querySelectorAll('.parallax-bg').forEach(el => {
+        const speed = parseFloat(el.dataset.speed) || 0.02;
+        el.style.transform = `translate(0, ${scrollY * speed * 100}px)`;
+      });
+    });
+  </script>
+
 </body>
 </html>
